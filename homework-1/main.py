@@ -1,1 +1,18 @@
 """Скрипт для заполнения данными таблиц в БД Postgres."""
+import psycopg2
+
+connection = psycopg2.connect(
+    host="localhost",
+    database="north",
+    user="postgres",
+    password="324214Kross!"
+)
+try:
+    with connection:
+        with connection.cursor() as cursor:
+            with open('../homework-1/north_data/customers_data.csv',
+                      'r', encoding="utf-8") as f:
+                next(f)
+                cursor.copy_from(f, 'customers', sep=',', null='')
+finally:
+    connection.close()
