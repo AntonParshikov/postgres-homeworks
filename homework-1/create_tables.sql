@@ -3,21 +3,18 @@ CREATE TABLE customers
 (
 	customer_id varchar(100) PRIMARY KEY,
 	company_name varchar(100) NOT NULL,
-	contact_name varchar(100) NOT NULL REFERENCES employees(first_name)
+	contact_name varchar(100) NOT NULL
 );
-
-
 
 CREATE TABLE employees
 (
 	employee_id int PRIMARY KEY,
-	first_name varchar(100) NOT NULL UNIQUE,
+	first_name varchar(100) NOT NULL,
 	last_name varchar(100) NOT NULL,
 	title varchar(100),
 	birth_date date,
 	notes text
 );
-
 
 
 CREATE TABLE orders
