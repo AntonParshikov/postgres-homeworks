@@ -1,5 +1,6 @@
 """Скрипт для заполнения данными таблиц в БД Postgres."""
 import psycopg2
+import csv
 
 connection = psycopg2.connect(
     host="localhost",
@@ -13,10 +14,15 @@ def customers_add_data():
     try:
         with connection:
             with connection.cursor() as cursor:
-                with open('../homework-1/north_data/customers_data.csv',
-                          'r', encoding="utf-8") as f:
-                    next(f)
-                    cursor.copy_from(f, 'customers', sep=',', null='')
+                with open('north_data/customers_data.csv', 'r') as f:
+                    reader = csv.reader(f)
+                    next(reader)  # пропуск хедера
+                    for row in reader:
+                        cursor.execute(
+                            "INSERT INTO customers (customer_id, company_name, contact_name) VALUES (%s, %s, %s)",
+                            row
+                        )
+
     finally:
         connection.close()
 
@@ -25,10 +31,15 @@ def employees_add_data():
     try:
         with connection:
             with connection.cursor() as cursor:
-                with open('../homework-1/north_data/employees_data.csv',
-                          'r', encoding="utf-8") as f:
-                    next(f)
-                    cursor.copy_from(f, 'employees', sep=',', null='')
+                with open('north_data/employees_data.csv', 'r') as f:
+                    reader = csv.reader(f)
+                    next(reader)
+                    for row in reader:
+                        cursor.execute(
+                            "INSERT INTO employees (employee_id, first_name, last_name, title, birth_date, notes) "
+                            "VALUES (%s, %s, %s, %s, %s, %s)",
+                            row
+                        )
     finally:
         connection.close()
 
@@ -37,13 +48,22 @@ def orders_add_data():
     try:
         with connection:
             with connection.cursor() as cursor:
-                with open('../homework-1/north_data/orders_data.csv',
-                          'r', encoding="utf-8") as f:
-                    next(f)
-                    cursor.copy_from(f, 'orders', sep=',', null='')
+                with open('north_data/orders_data.csv', 'r') as f:
+                    reader = csv.reader(f)
+                    next(reader)  # пропуск хедера
+                    for row in reader:
+                        cursor.execute(
+                            "INSERT INTO orders (order_id, customer_id, employee_id, order_date, ship_city) "
+                            "VALUES (%s, %s, %s, %s, %s)",
+                            row
+                        )
+
     finally:
         connection.close()
 
 
 if __name__ == '__main__':
-    employees_add_data()
+    # employees_add_data()
+    # customers_add_data()
+    # orders_add_data()
+    pass
